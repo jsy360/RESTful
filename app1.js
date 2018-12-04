@@ -43,11 +43,21 @@ app.post('/api', (req, res) => {
   // values['color'] = req.body.color;
 
 
-  // myPort.write(values['pattern']+','+values['speed']+'&'+values['color']+';'); //all serial functions in context of myPort object
   
   var input = req.body;
   JSON.stringify(input);
+
+  values['pattern'] = input.pattern;
+  values['speed'] = input.speed;
+  values['color'] = input.color;
+
   console.log("pattern is :"+input.pattern);
+  console.log("speed is :"+input.speed);
+  console.log("color is :"+input.color);
+
+  
+  myPort.write(input.pattern+','+input.speed+'&'+input.color+';'); 
+  //all serial functions in context of myPort object
 
   console.log(req.body);
   res.send(req.body);
@@ -63,15 +73,8 @@ app.post('/api', (req, res) => {
 //GET REQUESTS
 
 app.get("/color", (req, res) =>{
-  if (currentColor==0) {
-      res.json(['current color is set on blue']);    
-  }
-  else if (currentColor==1) {
-      res.json(['current color is set on red']);    
-  }
-  else if (currentColor==2) {
-      res.json(['current color is set on white']);    
-  }
+
+  res.send(values['color']); 
 })
 
 app.get("/pattern", (req, res) => {
