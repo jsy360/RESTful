@@ -1,9 +1,13 @@
 //listing all the requirements
-const express = require('express')
-const morgan = require('morgan')
+const express = require('express');
+const morgan = require('morgan');
+var values = require('./values.json');
+console.log(values);
+console.log(values['pattern']);
 
-const SerialPort = require('serialport')
-const myPort = new SerialPort('/dev/cu.usbmodem1411', 9600)
+
+const SerialPort = require('serialport');
+const myPort = new SerialPort('/dev/cu.usbmodem1411', 9600);
 
 var Readline = SerialPort.parsers.Readline; // make instance of Readline parser
 var parser = new Readline(); // make a new parser to read ASCII lines
@@ -20,24 +24,34 @@ var currentColor;
 //serialport stuff ends here
 
 //express stuff starts here
-const app = express()
-
-const bodyParser = require('body-parser')
-
-app.use(bodyParser.urlencoded({extended: false}))
-
-app.use(express.static('./public'))
-
-app.use(morgan('hello simon and keerthana'))
+const app = express();
+const bodyParser = require('body-parser');
+app.use(bodyParser.urlencoded({
+  extended: true
+}));
+app.use(express.static('./public'));
+app.use(morgan('hello simon and keerthana'));
 //this declares that morgan will be the environment we will use
 //so every time a client sends a request to this server it will need to be through app.dev(morgan) first
 
 //POST requests
 
 app.post('/api', (req, res) => {
-  myPort.write(req.body.pattern+','+req.body.speed+'&'+req.body.color+';'); //all serial functions in context of myPort object
+
+  // values['pattern'] = req.body.pattern;
+  // values['speed'] = req.body.speed;
+  // values['color'] = req.body.color;
+
+
+  // myPort.write(values['pattern']+','+values['speed']+'&'+values['color']+';'); //all serial functions in context of myPort object
   
+  var input = req.body;
+  JSON.stringify(input);
+  console.log("pattern is :"+input.pattern);
+
   console.log(req.body);
+  res.send(req.body);
+  //res.send(req.body['pattern']);
   // console.log(req.body.speed);
   // console.log(req.body.color);
 
@@ -73,11 +87,9 @@ app.get("/pattern", (req, res) => {
   else if (currentPattern==3) {
     res.json(['current pattern is strobe'])
   }
-
 })
 
 app.get("/color", (req, res) => {
-
   var color1 = {r: 'req.create_red', g: "25", b:"100"}
   res.json([color1])
   //res.send("Nodemon auto updates when I save this file")
