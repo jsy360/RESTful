@@ -73,35 +73,15 @@ app.post('/api', (req, res) => {
 //GET REQUESTS
 
 app.get("/color", (req, res) =>{
-
-  res.send(values['color']); 
+  res.send("current color is :"+values['color']); 
 })
 
 app.get("/pattern", (req, res) => {
-  if (currentPattern==0) {
-    res.json(['current pattern is nothing'])
-  }
-  else if (currentPattern==1) {
-    res.json(['current pattern is rainbow'])
-  }  
-  else if (currentPattern==2) {
-    res.json(['current pattern is fire'])
-  }
-  else if (currentPattern==3) {
-    res.json(['current pattern is strobe'])
-  }
-})
-
-app.get("/color", (req, res) => {
-  var color1 = {r: 'req.create_red', g: "25", b:"100"}
-  res.json([color1])
-  //res.send("Nodemon auto updates when I save this file")
+  res.send("current pattern is :"+values['pattern']); 
 })
 
 app.get("/speed", (req, res) => {
-  var speed = Number
-  res.json([speed])
-  //res.send("Nodemon auto updates when I save this file")
+  res.send("current speed is :"+values['speed']); 
 })
 
 
